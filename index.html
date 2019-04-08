@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+				<meta charset="utf-8" />
+				
+				<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+				<title>Validacion - Formulario</title>
+				<meta name="description" content="" />
+				<meta name="author" content="Swnk" />
+
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				
+				<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+				<style type="text/css">
+						body{font-family: arial; font-size: 12px}
+						label{padding:20px;}
+						titulo{color: red;}
+						.buttons{text-align: center;}
+						.buttons button{background-color: #286090; border-color: #204d74;color:white;}
+						#mensaje{display:none; border:1px solid red;}
+				</style>
+				<link href="http://megamaritimo.com:81/css/leaflet.css" media="screen" rel="stylesheet" type="text/css" />
+				<script type="text/javascript" src="http://megamaritimo.com:81/js/leaflet.js"></script>
+</head>
+<body>
+<titulo>Formulario</titulo><br><br>
+<form method="post" enctype="multipart/form-data" action="" onSubmit="inputsql(); return false;">
+<label style="font-weight:bold">Ingrese Fechas:</label><br><br>
+<label>Fecha: </label><input type="date" name="fecha" id="fecha" value="2019-04-04"><br>
+<label>Imagen </label><input type="file" name="imagen1" id="imagen1"><br>
+<label>Imagen </label><input type="file" name="imagen2" id="imagen2"><br>
+<input type="submit" value="Enviar">
+</form>
+</div>
+<div id="respuesta"></div>
+<br>
+<script>
+
+var i=0;
+var puntoslatitud = [], puntoslongitud = [];
+
+function imgValidation(img){
+	var allowedExtensions = /(.jpg|.jpeg|.png|.gif)$/i;
+
+	imageP = img.value;
+
+	if(!allowedExtensions.exec(imageP)){
+			alert('Solo se permiten archivos de tipo .jpeg/.jpg/.png/.gif.');
+			img.value = '';
+			return false;
+	}
+	else return true;
+}
+
+function inputsql()
+{
+
+	fecha = document.getElementById('ff').value;
+	var image1 = document.getElementById('imagen1');
+	var image2 = document.getElementById('imagen2');
+
+	if(fecha != "" && imgValidation(image1) && imgValidation(image2))
+	{
+		//ENVIANDO A BASE DE DATOS
+
+				var msg = confirm('Estas seguro de Guardar?');
+
+				if(msg == true)
+				{
+					params = 'fecha=' + fecha + '&fimagen1=' + image1 + '&imagen2=' + image2;
+
+					objsend=objJSXML();
+					objsend.open("POST","inserta.php?"+Math.random(),true);
+					objsend.onreadystatechange=function()
+					{
+						if (objsend.readyState==4) 
+						{
+							if(objsend.responseText.indexOf('invalid') == -1)
+							{
+								if(objsend.responseText == "1")
+								{
+										document.getElementById('mensaje').innerHTML = "";
+										document.getElementById('mensaje').style.display="block";
+	                                    document.getElementById('mensaje').innerHTML = "Se ha guardado en la BASE DE DATOS";
+								}
+								else{
+									if(objsend.responseText == "2")
+									{
+											document.getElementById('mensaje').innerHTML = "";
+											document.getElementById('mensaje').style.display="block";
+		                                    document.getElementById('mensaje').innerHTML = "El tipo de archivo de imagen no es aceptable";
+									}
+
+									else
+									{
+											document.getElementById('mensaje').innerHTML = "";
+											document.getElementById('mensaje').style.display="block";
+											document.getElementById('mensaje').innerHTML = "Revisa los datos ingresados no se ha podido guardar los datos";
+									}
+								}
+							}
+						}
+					}
+					objsend.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+					objsend.send(params);
+				}
+				else alert("Ha cancelado la inserción");
+	}
+	else alert('Ingrese fecha');
+}
+function objJSXML(){
+	var xmlhttp=false;
+	try{
+		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+	}catch(e){
+		try{
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}catch(E){
+			xmlhttp = false;
+		}
+	}
+	if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+		xmlhttp = new XMLHttpRequest();
+	}
+	return xmlhttp;
+}
+
+
+</script>
+</body>
+</html>
