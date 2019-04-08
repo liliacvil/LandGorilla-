@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 08-04-2019 a las 15:49:13
+-- Tiempo de generación: 08-04-2019 a las 16:01:08
 -- Versión del servidor: 5.5.44-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.22
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `insert_datos` (
   `image1` mediumblob,
   `image2` mediumblob,
   `tipoimagen1` varchar(50) DEFAULT NULL,
-  `tipoimagen` varchar(50) DEFAULT NULL,
+  `tipoimagen2` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
